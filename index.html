@@ -1,155 +1,180 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Indeed - Job Search</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f3f2f1;
-      color: #1c1c1c;
-      line-height: 1.5;
-    }
-    .job-title {
-      transition: color 0.3s, text-decoration 0.3s;
-    }
-    .job-title:hover {
-      color: #2557a7;
-      text-decoration: underline;
-    }
-    .pagination-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    /* Card hover effect */
-    .job-card {
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
-      transition: box-shadow 0.3s, transform 0.2s;
-    }
-    .job-card:hover {
-      box-shadow: 0 6px 15px rgb(0 0 0 / 0.15);
-      transform: translateY(-3px);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indeed - Jobs, Employment, Career</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            transition: background-color 0.3s;
+        }
+        .dark body {
+            background-color: #1a202c;
+        }
+        .dark .bg-white {
+            background-color: #2d3748;
+        }
+        .dark .text-gray-800 {
+            color: #e2e8f0;
+        }
+        .dark .text-gray-500 {
+            color: #a0aec0;
+        }
+        .dark .text-gray-600 {
+            color: #a0aec0;
+        }
+        .dark .shadow-xl {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
 </head>
-<body>
+<body class="bg-gray-100 p-8 flex flex-col items-center text-gray-900 dark:text-gray-100">
 
-  <header class="bg-white shadow-md px-8 py-6 mb-8">
-    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h1 class="text-4xl font-extrabold text-[#2557a7] tracking-tight">Indeed</h1>
-        <p class="text-gray-600 mt-1 text-lg">Find your next opportunity</p>
-      </div>
+    <div class="w-full max-w-4xl p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl transition-colors duration-300">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-white">Indeed Job Portal</h1>
+            <p class="text-lg text-gray-500 dark:text-gray-400 mt-2">Find your next role around the world.</p>
+        </header>
+
+        <div class="flex justify-end mb-4">
+            <button id="dark-mode-toggle" class="px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white font-semibold transition-colors">
+                Toggle Dark Mode
+            </button>
+        </div>
+
+        <main id="job-listings" class="space-y-4">
+            <!-- Job cards will be dynamically inserted here by JavaScript -->
+        </main>
+
+        <div class="mt-8 flex justify-center items-center space-x-4">
+            <button id="prev-page" class="px-6 py-2 rounded-full bg-indigo-500 text-white font-semibold hover:bg-indigo-600 transition-colors disabled:opacity-50" disabled>
+                Previous
+            </button>
+            <span id="page-info" class="text-gray-600 dark:text-gray-400 font-medium">Page 1 of 10</span>
+            <button id="next-page" class="px-6 py-2 rounded-full bg-indigo-500 text-white font-semibold hover:bg-indigo-600 transition-colors">
+                Next
+            </button>
+        </div>
     </div>
-  </header>
 
-  <main class="max-w-6xl mx-auto px-6 sm:px-8 mb-12">
-    <section id="job-listings" class="space-y-6">
-      <!-- Jobs inserted by JavaScript -->
-    </section>
+    <script>
+        const jobs = [
+            { role: "Software Engineer", company: "Tech Innovations Inc.", location: "New York, USA", salary: "$120,000" },
+            { role: "Data Scientist", company: "DataMetrics", location: "London, UK", salary: "£85,000" },
+            { role: "Project Manager", company: "Alpha Solutions", location: "Dubai, UAE", salary: "AED 200,000" },
+            { role: "Full Stack Developer", company: "Webworks", location: "Bangalore, India", salary: "₹1,800,000" },
+            { role: "DevOps Engineer", company: "CloudSphere", location: "San Francisco, USA", salary: "$145,000" },
+            { role: "UX Designer", company: "Creative Minds", location: "Manchester, UK", salary: "£60,000" },
+            { role: "Business Analyst", company: "Global Consultants", location: "Abu Dhabi, UAE", salary: "AED 180,000" },
+            { role: "Mobile App Developer", company: "MobileCraft", location: "Mumbai, India", salary: "₹1,500,000" },
+            { role: "Marketing Specialist", company: "Growth Hub", location: "Chicago, USA", salary: "$95,000" },
+            { role: "Network Administrator", company: "NetSecure", location: "Birmingham, UK", salary: "£55,000" },
+            { role: "Financial Analyst", company: "Capital Ventures", location: "Dubai, UAE", salary: "AED 195,000" },
+            { role: "Python Developer", company: "CodeMasters", location: "Pune, India", salary: "₹1,600,000" },
+            { role: "AI Research Scientist", company: "Future Labs", location: "Boston, USA", salary: "$160,000" },
+            { role: "Cybersecurity Analyst", company: "SecureTech", location: "Glasgow, UK", salary: "£75,000" },
+            { role: "Human Resources Manager", company: "Talent Finders", location: "Sharjah, UAE", salary: "AED 170,000" },
+            { role: "Cloud Solutions Architect", company: "AzureCloud", location: "Hyderabad, India", salary: "₹2,200,000" },
+            { role: "Sales Executive", company: "MarketConnect", location: "New York, USA", salary: "$80,000" },
+            { role: "Technical Writer", company: "DocuSense", location: "Edinburgh, UK", salary: "£45,000" },
+            { role: "Database Administrator", company: "DataFlow", location: "Dubai, UAE", salary: "AED 160,000" },
+            { role: "Frontend Engineer", company: "PixelPerfect", location: "Delhi, India", salary: "₹1,400,000" },
+            { role: "Product Manager", company: "Innovate Co.", location: "Toronto, Canada", salary: "C$110,000" },
+            { role: "UX Researcher", company: "User Insights Ltd.", location: "Sydney, Australia", salary: "A$105,000" },
+            { role: "Senior Java Developer", company: "Enterprise Systems", location: "Berlin, Germany", salary: "€95,000" },
+            { role: "Data Analyst", company: "Stats Inc.", location: "Singapore, Singapore", salary: "S$70,000" },
+            { role: "Machine Learning Engineer", company: "Cognitive AI", location: "Vancouver, Canada", salary: "C$130,000" },
+            { role: "Marketing Director", company: "Growth Engines", location: "Melbourne, Australia", salary: "A$150,000" },
+            { role: "Systems Administrator", company: "InfraCorp", location: "Frankfurt, Germany", salary: "€75,000" },
+            { role: "Cloud Security Engineer", company: "Secure Cloud Solutions", location: "Dublin, Ireland", salary: "€80,000" },
+            { role: "QA Engineer", company: "Quality First", location: "Tokyo, Japan", salary: "¥7,500,000" },
+            { role: "Game Developer", company: "Pixel Play", location: "Seoul, South Korea", salary: "₩60,000,000" },
+            { role: "DevOps Engineer", company: "CloudSphere", location: "San Francisco, USA", salary: "$145,000" },
+            { role: "UX Designer", company: "Creative Minds", location: "Manchester, UK", salary: "£60,000" },
+            { role: "Business Analyst", company: "Global Consultants", location: "Abu Dhabi, UAE", salary: "AED 180,000" },
+            { role: "Mobile App Developer", company: "MobileCraft", location: "Mumbai, India", salary: "₹1,500,000" },
+            { role: "Marketing Specialist", company: "Growth Hub", location: "Chicago, USA", salary: "$95,000" },
+            { role: "Network Administrator", company: "NetSecure", location: "Birmingham, UK", salary: "£55,000" },
+            { role: "Financial Analyst", company: "Capital Ventures", location: "Dubai, UAE", salary: "AED 195,000" },
+            { role: "Python Developer", company: "CodeMasters", location: "Pune, India", salary: "₹1,600,000" },
+            { role: "AI Research Scientist", company: "Future Labs", location: "Boston, USA", salary: "$160,000" },
+            { role: "Cybersecurity Analyst", company: "SecureTech", location: "Glasgow, UK", salary: "£75,000" },
+            { role: "Human Resources Manager", company: "Talent Finders", location: "Sharjah, UAE", salary: "AED 170,000" },
+            { role: "Cloud Solutions Architect", company: "AzureCloud", location: "Hyderabad, India", salary: "₹2,200,000" },
+            { role: "Sales Executive", company: "MarketConnect", location: "New York, USA", salary: "$80,000" },
+            { role: "Technical Writer", company: "DocuSense", location: "Edinburgh, UK", salary: "£45,000" },
+            { role: "Database Administrator", company: "DataFlow", location: "Dubai, UAE", salary: "AED 160,000" },
+            { role: "Frontend Engineer", company: "PixelPerfect", location: "Delhi, India", salary: "₹1,400,000" },
+            { role: "Product Manager", company: "Innovate Co.", location: "Toronto, Canada", salary: "C$110,000" },
+            { role: "UX Researcher", company: "User Insights Ltd.", location: "Sydney, Australia", salary: "A$105,000" },
+            { role: "Senior Java Developer", company: "Enterprise Systems", location: "Berlin, Germany", salary: "€95,000" },
+            { role: "Data Analyst", company: "Stats Inc.", location: "Singapore, Singapore", salary: "S$70,000" }
+        ];
 
-    <div class="flex justify-center items-center gap-6 mt-10">
-      <button id="prev-page" class="pagination-btn px-6 py-3 bg-[#2557a7] text-white font-semibold rounded-md shadow hover:bg-[#1e477a] transition" disabled>Previous</button>
-      <span id="page-info" class="text-gray-700 text-base font-medium">Page 1</span>
-      <button id="next-page" class="pagination-btn px-6 py-3 bg-[#2557a7] text-white font-semibold rounded-md shadow hover:bg-[#1e477a] transition">Next</button>
-    </div>
-  </main>
+        const jobsPerPage = 5;
+        let currentPage = 1;
+        const totalPages = Math.ceil(jobs.length / jobsPerPage);
 
-  <script>
-    const roles = ["Software Engineer", "Product Manager", "Data Analyst", "DevOps Engineer", "UX Designer"];
-    const companies = ["Google", "Amazon", "Microsoft", "Apple", "Netflix"];
-    const locations = ["New York, NY", "Seattle, WA", "Remote", "Austin, TX", "San Francisco, CA"];
-    const skills = [["Python", "Django"], ["React", "Node.js"], ["SQL", "Excel"], ["AWS", "Terraform"], ["Figma", "UX Research"]];
+        const jobListingsContainer = document.getElementById('job-listings');
+        const prevButton = document.getElementById('prev-page');
+        const nextButton = document.getElementById('next-page');
+        const pageInfoSpan = document.getElementById('page-info');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
 
-    function shuffle(array) {
-      let currentIndex = array.length, randomIndex;
-      while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-      }
-      return array;
-    }
+        function renderJobs() {
+            jobListingsContainer.innerHTML = '';
+            const start = (currentPage - 1) * jobsPerPage;
+            const end = start + jobsPerPage;
+            const jobsToDisplay = jobs.slice(start, end);
 
-    const jobs = [];
-    for (let i = 1; i <= 100; i++) {
-      const idx = Math.floor(Math.random() * 5);
-      jobs.push({
-        role: roles[idx],
-        company: companies[idx],
-        location: locations[idx],
-        salary: `$${90 + idx * 10},000`,
-        skills: skills[idx].join(', '),
-        job_link: `https://example.com/job/${i}`,
-        posting_date: `2025-09-${(i % 30 + 1).toString().padStart(2, '0')}`
-      });
-    }
+            jobsToDisplay.forEach(job => {
+                const jobCard = document.createElement('div');
+                jobCard.className = "p-5 bg-white dark:bg-gray-700 rounded-lg shadow-md flex items-center space-x-4 transition-colors duration-300";
+                jobCard.setAttribute('data-job-card', '');
 
-    // Optional: Shuffle the entire jobs array once so the roles are scattered nicely
-    shuffle(jobs);
+                jobCard.innerHTML = `
+                    <div class="flex-grow">
+                        <h2 data-job-role class="text-xl font-bold text-gray-800 dark:text-white">${job.role}</h2>
+                        <p data-job-company class="text-sm text-gray-600 dark:text-gray-400 mt-1">${job.company}</p>
+                        <p data-job-location class="text-sm text-gray-500 dark:text-gray-500">${job.location}</p>
+                    </div>
+                    <div class="text-right flex-shrink-0">
+                        <p data-job-salary class="text-lg font-semibold text-green-600 dark:text-green-400">${job.salary}</p>
+                        <span class="text-xs text-gray-400 dark:text-gray-600">Annual Salary</span>
+                    </div>
+                `;
+                jobListingsContainer.appendChild(jobCard);
+            });
 
-    const jobsPerPage = 10;
-    let currentPage = 1;
-    const totalPages = Math.ceil(jobs.length / jobsPerPage);
+            prevButton.disabled = currentPage === 1;
+            nextButton.disabled = currentPage === totalPages;
+            prevButton.style.opacity = prevButton.disabled ? 0.5 : 1;
+            nextButton.style.opacity = nextButton.disabled ? 0.5 : 1;
+            pageInfoSpan.textContent = `Page ${currentPage} of ${totalPages}`;
+        }
 
-    const jobListingsContainer = document.getElementById("job-listings");
-    const prevBtn = document.getElementById("prev-page");
-    const nextBtn = document.getElementById("next-page");
-    const pageInfo = document.getElementById("page-info");
+        prevButton.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderJobs();
+            }
+        });
 
-    function renderJobs() {
-      jobListingsContainer.innerHTML = "";
-      const start = (currentPage - 1) * jobsPerPage;
-      const end = start + jobsPerPage;
-      const jobsToShow = jobs.slice(start, end);
+        nextButton.addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderJobs();
+            }
+        });
 
-      jobsToShow.forEach(job => {
-        const jobRow = document.createElement("article");
-        jobRow.className = "job-card p-6";
+        darkModeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
 
-        jobRow.innerHTML = `
-          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-            <div class="flex flex-col gap-2 max-w-xl">
-              <a href="${job.job_link}" target="_blank" rel="noopener noreferrer" class="job-title text-2xl font-semibold leading-tight">${job.role}</a>
-              <span class="text-gray-800 text-lg font-medium">${job.company}</span>
-              <span class="text-gray-600">${job.location}</span>
-              <span class="text-gray-600"><strong>Skills:</strong> ${job.skills}</span>
-            </div>
-            <div class="sm:text-right mt-4 sm:mt-0 flex flex-col gap-1">
-              <div class="text-[#2d2d2d] font-semibold text-lg">${job.salary}</div>
-              <div class="text-gray-500 text-sm">Posted on ${job.posting_date}</div>
-            </div>
-          </div>
-        `;
-        jobListingsContainer.appendChild(jobRow);
-      });
-
-      prevBtn.disabled = currentPage === 1;
-      nextBtn.disabled = currentPage === totalPages;
-      pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-    }
-
-    prevBtn.addEventListener("click", () => {
-      if (currentPage > 1) {
-        currentPage--;
-        renderJobs();
-        window.scrollTo({top: 0, behavior: 'smooth'});
-      }
-    });
-
-    nextBtn.addEventListener("click", () => {
-      if (currentPage < totalPages) {
-        currentPage++;
-        renderJobs();
-        window.scrollTo({top: 0, behavior: 'smooth'});
-      }
-    });
-
-    document.addEventListener("DOMContentLoaded", renderJobs);
-  </script>
+        document.addEventListener('DOMContentLoaded', renderJobs);
+    </script>
 </body>
 </html>
