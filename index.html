@@ -1,180 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indeed - Jobs, Employment, Career</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-            transition: background-color 0.3s;
-        }
-        .dark body {
-            background-color: #1a202c;
-        }
-        .dark .bg-white {
-            background-color: #2d3748;
-        }
-        .dark .text-gray-800 {
-            color: #e2e8f0;
-        }
-        .dark .text-gray-500 {
-            color: #a0aec0;
-        }
-        .dark .text-gray-600 {
-            color: #a0aec0;
-        }
-        .dark .shadow-xl {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indeed - Jobs, Employment, Career</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s;
+    }
+    .dark body {
+      background-color: #1a202c;
+    }
+    .dark .bg-white {
+      background-color: #2d3748;
+    }
+    .dark .text-gray-800 {
+      color: #e2e8f0;
+    }
+    .dark .text-gray-500 {
+      color: #a0aec0;
+    }
+    .dark .text-gray-600 {
+      color: #a0aec0;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 p-8 flex flex-col items-center text-gray-900 dark:text-gray-100">
+<body class="bg-gray-100 text-gray-900 dark:text-gray-100 p-6 flex flex-col items-center">
 
-    <div class="w-full max-w-4xl p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl transition-colors duration-300">
-        <header class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-gray-800 dark:text-white">Indeed Job Portal</h1>
-            <p class="text-lg text-gray-500 dark:text-gray-400 mt-2">Find your next role around the world.</p>
-        </header>
+  <div class="w-full max-w-5xl bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl transition-colors duration-300">
+    <header class="text-center mb-6">
+      <h1 class="text-4xl font-bold text-gray-800 dark:text-white">Indeed</h1>
+      <p class="text-lg text-gray-500 dark:text-gray-400">Find your next role anywhere in the world</p>
+    </header>
 
-        <div class="flex justify-end mb-4">
-            <button id="dark-mode-toggle" class="px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white font-semibold transition-colors">
-                Toggle Dark Mode
-            </button>
-        </div>
-
-        <main id="job-listings" class="space-y-4">
-            <!-- Job cards will be dynamically inserted here by JavaScript -->
-        </main>
-
-        <div class="mt-8 flex justify-center items-center space-x-4">
-            <button id="prev-page" class="px-6 py-2 rounded-full bg-indigo-500 text-white font-semibold hover:bg-indigo-600 transition-colors disabled:opacity-50" disabled>
-                Previous
-            </button>
-            <span id="page-info" class="text-gray-600 dark:text-gray-400 font-medium">Page 1 of 10</span>
-            <button id="next-page" class="px-6 py-2 rounded-full bg-indigo-500 text-white font-semibold hover:bg-indigo-600 transition-colors">
-                Next
-            </button>
-        </div>
+    <div class="flex justify-end mb-4">
+      <button id="dark-mode-toggle" class="px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white font-semibold transition-colors">
+        Toggle Dark Mode
+      </button>
     </div>
 
-    <script>
-        const jobs = [
-            { role: "Software Engineer", company: "Tech Innovations Inc.", location: "New York, USA", salary: "$120,000" },
-            { role: "Data Scientist", company: "DataMetrics", location: "London, UK", salary: "£85,000" },
-            { role: "Project Manager", company: "Alpha Solutions", location: "Dubai, UAE", salary: "AED 200,000" },
-            { role: "Full Stack Developer", company: "Webworks", location: "Bangalore, India", salary: "₹1,800,000" },
-            { role: "DevOps Engineer", company: "CloudSphere", location: "San Francisco, USA", salary: "$145,000" },
-            { role: "UX Designer", company: "Creative Minds", location: "Manchester, UK", salary: "£60,000" },
-            { role: "Business Analyst", company: "Global Consultants", location: "Abu Dhabi, UAE", salary: "AED 180,000" },
-            { role: "Mobile App Developer", company: "MobileCraft", location: "Mumbai, India", salary: "₹1,500,000" },
-            { role: "Marketing Specialist", company: "Growth Hub", location: "Chicago, USA", salary: "$95,000" },
-            { role: "Network Administrator", company: "NetSecure", location: "Birmingham, UK", salary: "£55,000" },
-            { role: "Financial Analyst", company: "Capital Ventures", location: "Dubai, UAE", salary: "AED 195,000" },
-            { role: "Python Developer", company: "CodeMasters", location: "Pune, India", salary: "₹1,600,000" },
-            { role: "AI Research Scientist", company: "Future Labs", location: "Boston, USA", salary: "$160,000" },
-            { role: "Cybersecurity Analyst", company: "SecureTech", location: "Glasgow, UK", salary: "£75,000" },
-            { role: "Human Resources Manager", company: "Talent Finders", location: "Sharjah, UAE", salary: "AED 170,000" },
-            { role: "Cloud Solutions Architect", company: "AzureCloud", location: "Hyderabad, India", salary: "₹2,200,000" },
-            { role: "Sales Executive", company: "MarketConnect", location: "New York, USA", salary: "$80,000" },
-            { role: "Technical Writer", company: "DocuSense", location: "Edinburgh, UK", salary: "£45,000" },
-            { role: "Database Administrator", company: "DataFlow", location: "Dubai, UAE", salary: "AED 160,000" },
-            { role: "Frontend Engineer", company: "PixelPerfect", location: "Delhi, India", salary: "₹1,400,000" },
-            { role: "Product Manager", company: "Innovate Co.", location: "Toronto, Canada", salary: "C$110,000" },
-            { role: "UX Researcher", company: "User Insights Ltd.", location: "Sydney, Australia", salary: "A$105,000" },
-            { role: "Senior Java Developer", company: "Enterprise Systems", location: "Berlin, Germany", salary: "€95,000" },
-            { role: "Data Analyst", company: "Stats Inc.", location: "Singapore, Singapore", salary: "S$70,000" },
-            { role: "Machine Learning Engineer", company: "Cognitive AI", location: "Vancouver, Canada", salary: "C$130,000" },
-            { role: "Marketing Director", company: "Growth Engines", location: "Melbourne, Australia", salary: "A$150,000" },
-            { role: "Systems Administrator", company: "InfraCorp", location: "Frankfurt, Germany", salary: "€75,000" },
-            { role: "Cloud Security Engineer", company: "Secure Cloud Solutions", location: "Dublin, Ireland", salary: "€80,000" },
-            { role: "QA Engineer", company: "Quality First", location: "Tokyo, Japan", salary: "¥7,500,000" },
-            { role: "Game Developer", company: "Pixel Play", location: "Seoul, South Korea", salary: "₩60,000,000" },
-            { role: "DevOps Engineer", company: "CloudSphere", location: "San Francisco, USA", salary: "$145,000" },
-            { role: "UX Designer", company: "Creative Minds", location: "Manchester, UK", salary: "£60,000" },
-            { role: "Business Analyst", company: "Global Consultants", location: "Abu Dhabi, UAE", salary: "AED 180,000" },
-            { role: "Mobile App Developer", company: "MobileCraft", location: "Mumbai, India", salary: "₹1,500,000" },
-            { role: "Marketing Specialist", company: "Growth Hub", location: "Chicago, USA", salary: "$95,000" },
-            { role: "Network Administrator", company: "NetSecure", location: "Birmingham, UK", salary: "£55,000" },
-            { role: "Financial Analyst", company: "Capital Ventures", location: "Dubai, UAE", salary: "AED 195,000" },
-            { role: "Python Developer", company: "CodeMasters", location: "Pune, India", salary: "₹1,600,000" },
-            { role: "AI Research Scientist", company: "Future Labs", location: "Boston, USA", salary: "$160,000" },
-            { role: "Cybersecurity Analyst", company: "SecureTech", location: "Glasgow, UK", salary: "£75,000" },
-            { role: "Human Resources Manager", company: "Talent Finders", location: "Sharjah, UAE", salary: "AED 170,000" },
-            { role: "Cloud Solutions Architect", company: "AzureCloud", location: "Hyderabad, India", salary: "₹2,200,000" },
-            { role: "Sales Executive", company: "MarketConnect", location: "New York, USA", salary: "$80,000" },
-            { role: "Technical Writer", company: "DocuSense", location: "Edinburgh, UK", salary: "£45,000" },
-            { role: "Database Administrator", company: "DataFlow", location: "Dubai, UAE", salary: "AED 160,000" },
-            { role: "Frontend Engineer", company: "PixelPerfect", location: "Delhi, India", salary: "₹1,400,000" },
-            { role: "Product Manager", company: "Innovate Co.", location: "Toronto, Canada", salary: "C$110,000" },
-            { role: "UX Researcher", company: "User Insights Ltd.", location: "Sydney, Australia", salary: "A$105,000" },
-            { role: "Senior Java Developer", company: "Enterprise Systems", location: "Berlin, Germany", salary: "€95,000" },
-            { role: "Data Analyst", company: "Stats Inc.", location: "Singapore, Singapore", salary: "S$70,000" }
-        ];
+    <main id="job-listings" class="space-y-4">
+      <!-- Job cards inserted here by JS -->
+    </main>
 
-        const jobsPerPage = 5;
-        let currentPage = 1;
-        const totalPages = Math.ceil(jobs.length / jobsPerPage);
+    <div class="mt-8 flex justify-center items-center space-x-4">
+      <button id="prev-page" class="px-6 py-2 rounded-full bg-indigo-500 text-white font-semibold hover:bg-indigo-600 transition disabled:opacity-50" disabled>
+        Previous
+      </button>
+      <span id="page-info" class="text-gray-600 dark:text-gray-400 font-medium">Page 1</span>
+      <button id="next-page" class="px-6 py-2 rounded-full bg-indigo-500 text-white font-semibold hover:bg-indigo-600 transition">
+        Next
+      </button>
+    </div>
+  </div>
 
-        const jobListingsContainer = document.getElementById('job-listings');
-        const prevButton = document.getElementById('prev-page');
-        const nextButton = document.getElementById('next-page');
-        const pageInfoSpan = document.getElementById('page-info');
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
+  <script>
+    const jobs = [];
+    const sampleRoles = ["Software Engineer", "Data Scientist", "Product Manager", "UX Designer", "DevOps Engineer", "Cloud Architect", "AI Engineer", "Full Stack Developer", "QA Analyst", "Technical Writer"];
+    const companies = ["TechCorp", "InnoSoft", "CloudNine", "ByteWave", "NextGen", "SoftSystems", "NovaTech", "Skyline", "DataSphere", "CodeMinds"];
+    const locations = ["New York, USA", "London, UK", "Berlin, Germany", "Toronto, Canada", "Bangalore, India", "Sydney, Australia", "San Francisco, USA", "Tokyo, Japan", "Dubai, UAE", "Singapore"];
+    const skillsList = [["Python", "Django"], ["React", "Node.js"], ["AWS", "Terraform"], ["SQL", "Excel"], ["Figma", "User Research"], ["Kubernetes", "Docker"], ["Java", "Spring"], ["C#", ".NET"], ["GCP", "BigQuery"], ["TypeScript", "Angular"]];
 
-        function renderJobs() {
-            jobListingsContainer.innerHTML = '';
-            const start = (currentPage - 1) * jobsPerPage;
-            const end = start + jobsPerPage;
-            const jobsToDisplay = jobs.slice(start, end);
+    for (let i = 1; i <= 100; i++) {
+      const idx = i % 10;
+      jobs.push({
+        role: sampleRoles[idx],
+        company: companies[idx],
+        location: locations[idx],
+        salary: `$${80 + idx * 5},000`,
+        skills: skillsList[idx].join(', '),
+        job_link: `https://example.com/job/${i}`,
+        posting_date: `2025-09-${(i % 30 + 1).toString().padStart(2, '0')}`
+      });
+    }
 
-            jobsToDisplay.forEach(job => {
-                const jobCard = document.createElement('div');
-                jobCard.className = "p-5 bg-white dark:bg-gray-700 rounded-lg shadow-md flex items-center space-x-4 transition-colors duration-300";
-                jobCard.setAttribute('data-job-card', '');
+    const jobsPerPage = 6;
+    let currentPage = 1;
+    const totalPages = Math.ceil(jobs.length / jobsPerPage);
 
-                jobCard.innerHTML = `
-                    <div class="flex-grow">
-                        <h2 data-job-role class="text-xl font-bold text-gray-800 dark:text-white">${job.role}</h2>
-                        <p data-job-company class="text-sm text-gray-600 dark:text-gray-400 mt-1">${job.company}</p>
-                        <p data-job-location class="text-sm text-gray-500 dark:text-gray-500">${job.location}</p>
-                    </div>
-                    <div class="text-right flex-shrink-0">
-                        <p data-job-salary class="text-lg font-semibold text-green-600 dark:text-green-400">${job.salary}</p>
-                        <span class="text-xs text-gray-400 dark:text-gray-600">Annual Salary</span>
-                    </div>
-                `;
-                jobListingsContainer.appendChild(jobCard);
-            });
+    const jobListingsContainer = document.getElementById('job-listings');
+    const prevButton = document.getElementById('prev-page');
+    const nextButton = document.getElementById('next-page');
+    const pageInfoSpan = document.getElementById('page-info');
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
 
-            prevButton.disabled = currentPage === 1;
-            nextButton.disabled = currentPage === totalPages;
-            prevButton.style.opacity = prevButton.disabled ? 0.5 : 1;
-            nextButton.style.opacity = nextButton.disabled ? 0.5 : 1;
-            pageInfoSpan.textContent = `Page ${currentPage} of ${totalPages}`;
-        }
+    function renderJobs() {
+      jobListingsContainer.innerHTML = '';
+      const start = (currentPage - 1) * jobsPerPage;
+      const end = start + jobsPerPage;
+      const jobsToDisplay = jobs.slice(start, end);
 
-        prevButton.addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                renderJobs();
-            }
-        });
+      jobsToDisplay.forEach(job => {
+        const jobCard = document.createElement('a');
+        jobCard.href = job.job_link;
+        jobCard.target = "_blank";
+        jobCard.className = "block p-5 bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-lg transition space-y-2";
 
-        nextButton.addEventListener('click', () => {
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderJobs();
-            }
-        });
+        jobCard.innerHTML = `
+          <div class="flex justify-between items-center">
+            <div>
+              <h2 class="text-xl font-bold text-gray-800 dark:text-white">${job.role}</h2>
+              <p class="text-sm text-gray-600 dark:text-gray-400">${job.company}</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">${job.location}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-lg font-semibold text-green-600 dark:text-green-400">${job.salary}</p>
+              <p class="text-xs text-gray-400 dark:text-gray-500">Annual</p>
+            </div>
+          </div>
+          <div class="text-sm text-gray-600 dark:text-gray-300">
+            <strong>Skills:</strong> ${job.skills}
+          </div>
+          <div class="text-xs text-gray-400 dark:text-gray-500">
+            Posted on ${job.posting_date}
+          </div>
+        `;
 
-        darkModeToggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-        });
+        jobListingsContainer.appendChild(jobCard);
+      });
 
-        document.addEventListener('DOMContentLoaded', renderJobs);
-    </script>
+      prevButton.disabled = currentPage === 1;
+      nextButton.disabled = currentPage === totalPages;
+      pageInfoSpan.textContent = `Page ${currentPage} of ${totalPages}`;
+    }
+
+    prevButton.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderJobs();
+      }
+    });
+
+    nextButton.addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderJobs();
+      }
+    });
+
+    darkModeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+    });
+
+    document.addEventListener('DOMContentLoaded', renderJobs);
+  </script>
 </body>
 </html>
